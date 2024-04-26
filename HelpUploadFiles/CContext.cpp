@@ -1,8 +1,7 @@
 #include "CContext.h"
 
 CContext* CContext::singleton = new CContext;
-LPCTSTR SharedMemoryName = _T("HelpUploadFileSharedMemory");
-LPCTSTR EventName = _T("HelpUploadEvent");
+
 
 CContext::CContext()
 {
@@ -12,6 +11,13 @@ CContext::CContext()
     if (hEvent == INVALID_HANDLE_VALUE) {
         wchar_t buffer[100];
         std::swprintf(buffer, _countof(buffer), _T("CreateEvent failed with %d"), GetLastError());
+        throw buffer;
+    }
+
+    this->hWaitReadEvent = CreateEvent(0, FALSE, TRUE, EventWaitReadName); // 初始可写
+    if (hWaitReadEvent== INVALID_HANDLE_VALUE) {
+        wchar_t buffer[100];
+        std::swprintf(buffer, _countof(buffer), _T("CreateReadEvent failed with %d"), GetLastError());
         throw buffer;
     }
 
@@ -43,6 +49,8 @@ VOID CContext::DoOperation(CIgnoreInfo* pIgnoreInfo, std::wstring fileName, CIgn
     _tcscpy_s(pIgnoreInfo->fileName, cbWrite, fileName.c_str());
 
     // 写入共享内存
+    WaitForSingleObject(this->hWaitReadEvent, INFINITE);
+
     LPVOID sharedMemory = MapViewOfFile(this->hSharedMem, FILE_MAP_WRITE, 0, 0, sizeof(CIgnoreInfo));
     if (sharedMemory != NULL) {
         pIgnoreInfo->Serialize(sharedMemory);

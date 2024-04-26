@@ -10,6 +10,7 @@ class CContext
 private:
     HANDLE hSharedMem;
     HANDLE hEvent;
+    HANDLE hWaitReadEvent;
 public:
     static CContext* singleton;
     CContext();

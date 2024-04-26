@@ -33,6 +33,8 @@ INT_PTR CALLBACK CMainDlg::MainDlg(HWND hDlg, UINT message, WPARAM wParam, LPARA
 
 VOID CMainDlg::OnDlgInit()
 {
+    this->haveInject = false;
+
     this->hInjectWnd = NULL;
     SetDlgItemText(this->hDlg, IDC_CAPTUREWND, _T("长按鼠标开启捕获"));
 
@@ -81,6 +83,9 @@ void CMainDlg::SaveParameters(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 
 void CMainDlg::OnAdd()
 {
+    if (!isHaveInject()) {
+        return;
+    }
     GetInputString();
     DoAdd();
 }
@@ -120,6 +125,8 @@ void CMainDlg::OnInject()
     }
     CContext::singleton->InjectWorkDll(this->hInjectWnd);
     this->hInjectWnd = NULL;
+
+    this->haveInject = true;
 }
 
 
@@ -132,6 +139,10 @@ void CMainDlg::OnOpenAbout()
 void CMainDlg::OnDropFile()
 {
     HDROP hDrop = (HDROP)this->wParam;
+    if (!isHaveInject()) {
+        DragFinish(hDrop); // 结束此次拖拽
+        return;
+    }
 
     if (IDCANCEL == MessageBox(this->hDlg, _T("检测到拖拽文件，是否添加到忽略列表？"), _T("提示"), MB_ICONQUESTION | MB_OKCANCEL | MB_DEFBUTTON1)) {
         DragFinish(hDrop); // 结束此次拖拽
@@ -207,4 +218,16 @@ void CMainDlg::OnLButtonUp()
     if (IDOK == MessageBox(this->hDlg, sz, _T("加载赋能模块"), MB_ICONQUESTION | MB_OKCANCEL)) {
         OnInject();
     }
+}
+
+
+bool CMainDlg::isHaveInject()
+{
+    bool b = this->haveInject;
+    if (!b) {
+        TCHAR sz[MAX_PATH];
+        std::swprintf(sz, _countof(sz), _T("尚未注入赋能模块，请先完成注入操作"));
+        MessageBox(this->hDlg, sz, _T("提示"), MB_ICONWARNING);
+    }
+    return b;
 }

@@ -2,9 +2,6 @@
 #include "CAdvice.h"
 #include "CIgnoreInfo.h"
 
-// 命名管道 & 读写结构
-LPCTSTR SharedMemoryName = _T("HelpUploadFileSharedMemory");
-LPCTSTR EventName = _T("HelpUploadEvent");
 
 // 单例初始化
 CAdvice* CAdvice::singleton = new CAdvice;
@@ -69,6 +66,8 @@ UINT CALLBACK CAdvice::ListenThread(LPVOID pParam)
 			}
 
 			UnmapViewOfFile(sharedMemory);
+
+			SetEvent(pAdvice->hWaitReadEvent);
 		}
 	}
 }
@@ -85,6 +84,13 @@ CAdvice::CAdvice()
 		wchar_t sz[100];
 		std::swprintf(sz, _countof(sz), _T("创建失败 : %d"), GetLastError());
 		MessageBox(NULL, sz, _T("初始化事件"), MB_ICONINFORMATION);
+	}
+
+	this->hWaitReadEvent = CreateEvent(0, FALSE, TRUE, EventWaitReadName);
+	if (this->hWaitReadEvent == INVALID_HANDLE_VALUE) {
+		wchar_t sz[100];
+		std::swprintf(sz, _countof(sz), _T("创建失败 : %d"), GetLastError());
+		MessageBox(NULL, sz, _T("初始化读等待事件"), MB_ICONINFORMATION);
 	}
 
 	this->hSharedMem = OpenFileMapping(FILE_MAP_READ, FALSE, SharedMemoryName);

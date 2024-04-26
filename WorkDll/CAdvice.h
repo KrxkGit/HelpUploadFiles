@@ -11,6 +11,7 @@ public:
 private:
 	HANDLE hSharedMem;
 	HANDLE hEvent;
+	HANDLE hWaitReadEvent;
 	std::list<std::wstring> interceptTable;
 public:
 	static UINT CALLBACK ListenThread(LPVOID pParam);

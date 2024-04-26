@@ -1,5 +1,10 @@
 #include "CIgnoreInfo.h"
 
+// 进程同步定义
+LPCTSTR SharedMemoryName = _T("HelpUploadFileSharedMemory");
+LPCTSTR EventName = _T("HelpUploadEvent");
+LPCTSTR EventWaitReadName = _T("HelpUploadWaitReadEvent");
+
 VOID CIgnoreInfo::Serialize(LPVOID lpData)
 {
 	size_t endPos = lstrlen(this->fileName) + 1;

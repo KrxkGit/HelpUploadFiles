@@ -35,13 +35,13 @@ VOID DllInit()
 	//StringCchPrintf(sz, _countof(sz), _T("DLL被加载！\t应用程序路径：%s"), szPath);
 	//MyOutputDebugStringW(sz);
 	
+	wchar_t sz[100];
+	std::swprintf(sz, _countof(sz), _T("赋能模块注入成功\n进程ID: %d"), GetCurrentProcessId());
 	CAdvice::singleton->startListenThread();
-	MessageBox(NULL, _T("赋能模块注入成功"), _T("HelpUploadFiles"), MB_ICONINFORMATION);
+	MessageBox(NULL, sz, _T("HelpUploadFiles"), MB_ICONINFORMATION);
 }
 
 // API 拦截
-
-
 /**
  * @brief 用于拦截百度网盘 上传文件，排除指定文件
  * @param hFindFile 
@@ -53,11 +53,32 @@ BOOL WINAPI MyFindNextFileW(HANDLE hFindFile, LPWIN32_FIND_DATAW lpFindFileData)
 	BOOL res = FindNextFileW(hFindFile, lpFindFileData);
 
 	CAdvice* pAdvice = CAdvice::singleton;
-	for (bool b = pAdvice->isMatch(lpFindFileData); b; b = pAdvice->isMatch(lpFindFileData)) {
+	for (bool b = pAdvice->isMatch(lpFindFileData); b && res; b = pAdvice->isMatch(lpFindFileData)) {
+		//MessageBox(NULL, lpFindFileData->cFileName, _T("提示"), MB_ICONINFORMATION);
 		res = FindNextFileW(hFindFile, lpFindFileData); // 直接跳到下一个文件
 	}
 	return res;
 }
+
+/**
+ * @brief 拦截 FindFirstFileW
+ * @param lpFileName 
+ * @param lpFindFileData 
+ * @return 
+*/
+HANDLE WINAPI MyFindFirstFileW(LPCWSTR lpFileName, LPWIN32_FIND_DATAW lpFindFileData)
+{
+	HANDLE h = FindFirstFileW(lpFileName, lpFindFileData);
+	//MessageBox(NULL, lpFindFileData->cFileName, _T("首个文件"), MB_ICONINFORMATION);
+
+	//CAdvice* pAdvice = CAdvice::singleton;
+	//for (bool b = pAdvice->isMatch(lpFindFileData); b; b = pAdvice->isMatch(lpFindFileData)) {
+	//	FindNextFileW(h, lpFindFileData); // 直接跳到下一个文件
+	//}
+
+	return h;
+}
 // API 拦截
 
 CAPIHook g_MyFindNextFile("Kernel32.dll", "FindNextFileW" , (PROC)MyFindNextFileW);
+CAPIHook g_MyFindFirstFile("Kernel32.dll", "FindFirstFileW", (PROC)MyFindFirstFileW);

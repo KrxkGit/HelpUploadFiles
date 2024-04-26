@@ -24,6 +24,7 @@ private:
 
 	HWND hInjectWnd;
 	TCHAR szTitle[MAX_PATH]; // 注入的窗口标题 / 类
+	bool haveInject;
 public:
 	static INT_PTR CALLBACK MainDlg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 protected:
@@ -42,5 +43,6 @@ protected:
 	void OnMouseMove();
 	void OnLButtonDown();
 	void OnLButtonUp();
+	bool isHaveInject();
 };
 
