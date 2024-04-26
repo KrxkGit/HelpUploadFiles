@@ -1,5 +1,6 @@
 #pragma once
 #include <process.h>
+#include <regex>
 
 /**
  * @brief ºöÂÔÎÄ¼þÀ¹½ØÆ÷
@@ -13,6 +14,7 @@ private:
 	HANDLE hEvent;
 	HANDLE hWaitReadEvent;
 	std::list<std::wstring> interceptTable;
+	bool syntaxError;
 public:
 	static UINT CALLBACK ListenThread(LPVOID pParam);
 public:
@@ -22,5 +24,8 @@ public:
 	void addIgnoreFile(std::wstring ignoreFileName);
 	void removeIgnoreFile(std::wstring ignoreFileName);
 	void startListenThread();
+	bool isSyntaxError();
+protected:
+	void resetSyntaxError();
 };
 

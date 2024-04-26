@@ -4,6 +4,7 @@
 #include "resource.h"
 #include "CIgnoreFileManager.h"
 #include "CAboutDlg.h"
+#include "CEscapeRegex.h"
 
 class CMainDlg
 {

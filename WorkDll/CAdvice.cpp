@@ -8,18 +8,37 @@ CAdvice* CAdvice::singleton = new CAdvice;
 
 bool CAdvice::isMatch(LPWIN32_FIND_DATA lpFindFileData)
 {
-	bool bMatch = false;
-	std::wstring fileNameStr = lpFindFileData->cFileName;
-
-	for (std::list<std::wstring>::iterator iter = this->interceptTable.begin(); iter != this->interceptTable.end(); iter++) {
-		std::wstring subStr = *iter;
-		if (fileNameStr.find(subStr) != std::wstring::npos)
-		{
-			bMatch = true;
-			break;
-		}
+	if (this->syntaxError) {
+		return false;
 	}
-	return bMatch;
+
+	std::wstring subStr;
+	try {
+		bool bMatch = false;
+		std::wstring fileNameStr = lpFindFileData->cFileName;
+
+		for (std::list<std::wstring>::iterator iter = this->interceptTable.begin(); iter != this->interceptTable.end(); iter++) {
+			subStr = *iter;
+
+			// 基于正则规则匹配
+			std::wregex pattern(subStr);
+
+			if (std::regex_match(fileNameStr, pattern))
+			{
+				bMatch = true;
+				break;
+			}
+		}
+		return bMatch;
+	}
+	catch(...) {
+		wchar_t sz[1000];
+		std::swprintf(sz, _countof(sz), _T("正则表达式 %s 语法不正确。"), subStr.c_str());
+		MessageBox(NULL, sz, _T("语法检查"), MB_ICONWARNING);
+
+		this->syntaxError = true;
+		return false; // 默认状态是不匹配
+	}
 }
 
 /**
@@ -29,6 +48,7 @@ bool CAdvice::isMatch(LPWIN32_FIND_DATA lpFindFileData)
 void CAdvice::addIgnoreFile(std::wstring ignoreFileName)
 {
 	this->interceptTable.push_back(ignoreFileName);
+	resetSyntaxError();
 }
 
 /**
@@ -38,6 +58,7 @@ void CAdvice::addIgnoreFile(std::wstring ignoreFileName)
 void CAdvice::removeIgnoreFile(std::wstring ignoreFileName)
 {
 	this->interceptTable.remove(ignoreFileName);
+	resetSyntaxError();
 }
 
 /**
@@ -79,6 +100,8 @@ void CAdvice::startListenThread()
 
 CAdvice::CAdvice()
 {
+	this->syntaxError = false;
+
 	this->hEvent = CreateEvent(0, FALSE, FALSE, EventName);
 	if (this->hEvent == INVALID_HANDLE_VALUE) {
 		wchar_t sz[100];
@@ -105,4 +128,15 @@ CAdvice::~CAdvice()
 {
 	CloseHandle(this->hSharedMem);
 	CloseHandle(this->hEvent);
+}
+
+bool CAdvice::isSyntaxError()
+{
+	return this->syntaxError;
+}
+
+
+void CAdvice::resetSyntaxError()
+{
+	this->syntaxError = false;
 }

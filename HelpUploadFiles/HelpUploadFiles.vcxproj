@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClInclude Include="CAboutDlg.h" />
     <ClInclude Include="CContext.h" />
+    <ClInclude Include="CEscapeRegex.h" />
     <ClInclude Include="CIgnoreFileManager.h" />
     <ClInclude Include="CInjectDll.h" />
     <ClInclude Include="CMainDlg.h" />
@@ -154,6 +155,7 @@
   <ItemGroup>
     <ClCompile Include="CAboutDlg.cpp" />
     <ClCompile Include="CContext.cpp" />
+    <ClCompile Include="CEscapeRegex.cpp" />
     <ClCompile Include="CIgnoreFileManager.cpp" />
     <ClCompile Include="CInjectDll.cpp" />
     <ClCompile Include="CMainDlg.cpp" />
@@ -164,14 +166,11 @@
     <ResourceCompile Include="HelpUploadFiles.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="helpuplo.ico" />
     <Image Include="HelpUploadFiles.ico" />
-    <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
     <None Include="cursor.cur" />
-    <None Include="D:\cursor.cur" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

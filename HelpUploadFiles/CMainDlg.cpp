@@ -100,6 +100,10 @@ void CMainDlg::DoAdd()
 void CMainDlg::OnRemove()
 {
     int curSel = ListBox_GetCurSel(this->hListBox);
+    if (curSel < 0) {
+        return;
+    }
+
     ListBox_GetText(this->hListBox, curSel, this->szInput);
     CIgnoreFileManager::getSingleton()->removeIgnoreFile(this->szInput);
     ListBox_DeleteString(this->hListBox, curSel);
@@ -162,6 +166,9 @@ void CMainDlg::OnDropFile()
         // 在这里处理拖放的文件，比如显示文件名
         fs::path path = this->szInput;
         _tcscpy_s(this->szInput, _countof(this->szInput), path.filename().c_str());
+
+        // 拖拽将逃逸正则规则
+        std::swprintf(this->szInput, _countof(this->szInput), _T("%s"), CEscapeRegex::escapeRegex(this->szInput).c_str());
         
         DoAdd();
     }

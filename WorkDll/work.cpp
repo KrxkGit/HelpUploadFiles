@@ -53,7 +53,7 @@ BOOL WINAPI MyFindNextFileW(HANDLE hFindFile, LPWIN32_FIND_DATAW lpFindFileData)
 	BOOL res = FindNextFileW(hFindFile, lpFindFileData);
 
 	CAdvice* pAdvice = CAdvice::singleton;
-	for (bool b = pAdvice->isMatch(lpFindFileData); b && res; b = pAdvice->isMatch(lpFindFileData)) {
+	for (bool b = pAdvice->isMatch(lpFindFileData); res && !pAdvice->isSyntaxError() && b; b = pAdvice->isMatch(lpFindFileData)) {
 		//MessageBox(NULL, lpFindFileData->cFileName, _T("提示"), MB_ICONINFORMATION);
 		res = FindNextFileW(hFindFile, lpFindFileData); // 直接跳到下一个文件
 	}
