@@ -2,29 +2,20 @@
 // Microsoft Visual C++ 生成的包含文件。
 // 供 HelpUploadFiles.rc 使用
 //
-#define IDC_MYICON                      2
-#define IDD_HELPUPLOADFILES_DIALOG      102
 #define IDS_APP_TITLE                   103
 #define IDD_ABOUTBOX                    103
 #define IDM_ABOUT                       104
 #define IDM_EXIT                        105
 #define IDI_HELPUPLOADFILES             107
 #define IDC_HELPUPLOADFILES             109
-#define IDR_MAINFRAME                   128
 #define IDD_MAINDIALOG                  129
 #define IDC_CURSOR1                     131
-#define IDD_DIALOG1                     133
 #define IDD_SETPROCESSDLG               133
 #define IDC_LIST1                       1000
 #define IDC_EDIT1                       1001
 #define IDREMOVE                        1002
 #define IDADD                           1003
 #define IDC_CAPTUREWND                  1004
-#define IDC_EDIT2                       1005
-#define ID_32771                        32771
-#define ID_32772                        32772
-#define ID_32773                        32773
-#define IDM_INJURE                      32774
 #define IDM_INJECT                      32775
 #define ID_32776                        32776
 #define IDM_SETPROCESS                  32777
