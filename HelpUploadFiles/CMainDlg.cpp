@@ -66,6 +66,9 @@ void CMainDlg::OnCommand()
     case IDM_INJECT:
         OnInject();
         break;
+    case IDM_SETPROCESS:
+        OnSetProcessId();
+        break;
     case IDM_ABOUT:
         OnOpenAbout();
     }
@@ -237,4 +240,19 @@ bool CMainDlg::isHaveInject()
         MessageBox(this->hDlg, sz, _T("提示"), MB_ICONWARNING);
     }
     return b;
+}
+
+
+void CMainDlg::OnSetProcessId()
+{
+    // TODO: 在此处添加实现代码.
+    INT_PTR res = DialogBox(hInst, MAKEINTRESOURCE(IDD_SETPROCESSDLG), this->hDlg, CSetProcessDlg::SetProcess);
+    if (res == IDCANCEL) {
+        return;
+    }
+    
+    CInjectDll::DoInject(CSetProcessDlg::singleton->getProcessId());
+
+    this->haveInject = true;
+    
 }

@@ -7,5 +7,8 @@ private:
 	static UINT CALLBACK MyCreateRemoteThread(LPVOID pParam);
 public:
 	static VOID DoInject(HWND hWnd);
+	static VOID DoInject(DWORD dwProcessId);
+protected:
+	static void RunInjectThread();
 };
 

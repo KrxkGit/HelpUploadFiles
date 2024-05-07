@@ -13,6 +13,8 @@
 #define IDR_MAINFRAME                   128
 #define IDD_MAINDIALOG                  129
 #define IDC_CURSOR1                     131
+#define IDD_DIALOG1                     133
+#define IDD_SETPROCESSDLG               133
 #define IDC_LIST1                       1000
 #define IDC_EDIT1                       1001
 #define IDREMOVE                        1002
@@ -24,6 +26,8 @@
 #define ID_32773                        32773
 #define IDM_INJURE                      32774
 #define IDM_INJECT                      32775
+#define ID_32776                        32776
+#define IDM_SETPROCESS                  32777
 #define IDC_STATIC                      -1
 
 // Next default values for new objects
@@ -31,8 +35,8 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        133
-#define _APS_NEXT_COMMAND_VALUE         32776
+#define _APS_NEXT_RESOURCE_VALUE        134
+#define _APS_NEXT_COMMAND_VALUE         32778
 #define _APS_NEXT_CONTROL_VALUE         1006
 #define _APS_NEXT_SYMED_VALUE           110
 #endif

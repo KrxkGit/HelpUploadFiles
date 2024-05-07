@@ -146,6 +146,7 @@
     <ClInclude Include="CIgnoreFileManager.h" />
     <ClInclude Include="CInjectDll.h" />
     <ClInclude Include="CMainDlg.h" />
+    <ClInclude Include="CSetProcessDlg.h" />
     <ClInclude Include="CSkin.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="HelpUploadFiles.h" />
@@ -159,6 +160,7 @@
     <ClCompile Include="CIgnoreFileManager.cpp" />
     <ClCompile Include="CInjectDll.cpp" />
     <ClCompile Include="CMainDlg.cpp" />
+    <ClCompile Include="CSetProcessDlg.cpp" />
     <ClCompile Include="CSkin.cpp" />
     <ClCompile Include="HelpUploadFiles.cpp" />
   </ItemGroup>

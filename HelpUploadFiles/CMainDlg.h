@@ -5,6 +5,7 @@
 #include "CIgnoreFileManager.h"
 #include "CAboutDlg.h"
 #include "CEscapeRegex.h"
+#include "CSetProcessDlg.h"
 
 class CMainDlg
 {
@@ -45,5 +46,6 @@ protected:
 	void OnLButtonDown();
 	void OnLButtonUp();
 	bool isHaveInject();
+	void OnSetProcessId();
 };
 

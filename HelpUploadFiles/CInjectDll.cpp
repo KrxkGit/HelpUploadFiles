@@ -50,6 +50,18 @@ VOID CInjectDll::DoInject(HWND hWnd)
 	//HWND hBaiduWnd = FindWindow(_T("DuiHostWnd"), NULL);
 	GetWindowThreadProcessId(hWnd, &CInjectDll::dwProcessId);
 
+	RunInjectThread();
+}
+
+VOID CInjectDll::DoInject(DWORD dwProcessId)
+{
+	CInjectDll::dwProcessId = dwProcessId;
+
+	RunInjectThread();
+}
+
+void CInjectDll::RunInjectThread()
+{
 	// 开启新线程注入 dll
 	_beginthreadex(0, 0, CInjectDll::MyCreateRemoteThread, 0, 0, 0);
 }
