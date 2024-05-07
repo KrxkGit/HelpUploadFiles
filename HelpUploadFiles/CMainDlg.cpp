@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "CMainDlg.h"
 
 CMainDlg* CMainDlg::singleton = new CMainDlg;
@@ -36,7 +36,7 @@ VOID CMainDlg::OnDlgInit()
     this->haveInject = false;
 
     this->hInjectWnd = NULL;
-    SetDlgItemText(this->hDlg, IDC_CAPTUREWND, _T("³¤°´Êó±ê¿ªÆô²¶»ñ"));
+    SetDlgItemText(this->hDlg, IDC_CAPTUREWND, _T("é•¿æŒ‰é¼ æ ‡å¼€å¯æ•è·"));
 
     this->hListBox = GetDlgItem(this->hDlg, IDC_LIST1);
     this->hIcon = LoadIcon(this->hInst, MAKEINTRESOURCE(IDI_HELPUPLOADFILES));
@@ -51,7 +51,7 @@ VOID CMainDlg::OnDlgInit()
 
 void CMainDlg::OnCommand()
 {
-    // TODO: ÔÚ´Ë´¦Ìí¼ÓÊµÏÖ´úÂë.
+    // TODO: åœ¨æ­¤å¤„æ·»åŠ å®ç°ä»£ç .
     switch (LOWORD(this->wParam))
     {
     case IDCANCEL:
@@ -111,7 +111,7 @@ void CMainDlg::OnRemove()
     CIgnoreFileManager::getSingleton()->removeIgnoreFile(this->szInput);
     ListBox_DeleteString(this->hListBox, curSel);
 
-    // ÉèÖÃÏÂÒ»¸öÑ¡ÖĞµÄÎ»ÖÃ
+    // è®¾ç½®ä¸‹ä¸€ä¸ªé€‰ä¸­çš„ä½ç½®
     if (curSel > 0) {
         curSel--;
     }
@@ -147,18 +147,18 @@ void CMainDlg::OnDropFile()
 {
     HDROP hDrop = (HDROP)this->wParam;
     if (!isHaveInject()) {
-        DragFinish(hDrop); // ½áÊø´Ë´ÎÍÏ×§
+        DragFinish(hDrop); // ç»“æŸæ­¤æ¬¡æ‹–æ‹½
         return;
     }
 
-    if (IDCANCEL == MessageBox(this->hDlg, _T("¼ì²âµ½ÍÏ×§ÎÄ¼ş£¬ÊÇ·ñÌí¼Óµ½ºöÂÔÁĞ±í£¿"), _T("ÌáÊ¾"), MB_ICONQUESTION | MB_OKCANCEL | MB_DEFBUTTON1)) {
-        DragFinish(hDrop); // ½áÊø´Ë´ÎÍÏ×§
+    if (IDCANCEL == MessageBox(this->hDlg, _T("æ£€æµ‹åˆ°æ‹–æ‹½æ–‡ä»¶ï¼Œæ˜¯å¦æ·»åŠ åˆ°å¿½ç•¥åˆ—è¡¨ï¼Ÿ"), _T("æç¤º"), MB_ICONQUESTION | MB_OKCANCEL | MB_DEFBUTTON1)) {
+        DragFinish(hDrop); // ç»“æŸæ­¤æ¬¡æ‹–æ‹½
         return;
     }
     
     UINT numFiles = DragQueryFile(hDrop, 0xFFFFFFFF, NULL, 0);
 
-    // ´Ë¹¦ÄÜ´Ó C++ 17 ¿ªÊ¼Ö§³Ö
+    // æ­¤åŠŸèƒ½ä» C++ 17 å¼€å§‹æ”¯æŒ
     namespace fs = std::filesystem;
 
     for (UINT i = 0; i < numFiles; i++)
@@ -166,11 +166,11 @@ void CMainDlg::OnDropFile()
         //TCHAR szFileName[MAX_PATH];
         DragQueryFile(hDrop, i, this->szInput, MAX_PATH);
 
-        // ÔÚÕâÀï´¦ÀíÍÏ·ÅµÄÎÄ¼ş£¬±ÈÈçÏÔÊ¾ÎÄ¼şÃû
+        // åœ¨è¿™é‡Œå¤„ç†æ‹–æ”¾çš„æ–‡ä»¶ï¼Œæ¯”å¦‚æ˜¾ç¤ºæ–‡ä»¶å
         fs::path path = this->szInput;
         _tcscpy_s(this->szInput, _countof(this->szInput), path.filename().c_str());
 
-        // ÍÏ×§½«ÌÓÒİÕıÔò¹æÔò
+        // æ‹–æ‹½å°†é€ƒé€¸æ­£åˆ™è§„åˆ™
         std::swprintf(this->szInput, _countof(this->szInput), _T("%s"), CEscapeRegex::escapeRegex(this->szInput).c_str());
         
         DoAdd();
@@ -190,7 +190,7 @@ void CMainDlg::OnMouseMove()
     GetCursorPos(&pt);
     HWND hWnd = WindowFromPoint(pt);
     if (hWnd == this->hInjectWnd) {
-        // ´°¿ÚÎ´·¢ËÍ±ä»¯£¬²»´¦Àí
+        // çª—å£æœªå‘é€å˜åŒ–ï¼Œä¸å¤„ç†
         return;
     }
     this->hInjectWnd = hWnd;
@@ -223,9 +223,9 @@ void CMainDlg::OnLButtonUp()
     SetCursor(this->hOldCur);
 
     TCHAR sz[MAX_PATH];
-    std::swprintf(sz, _countof(sz), _T("ÊÇ·ñÎª´°¿Ú %s ¼ÓÔØ¸³ÄÜÄ£¿é"), this->szTitle);
+    std::swprintf(sz, _countof(sz), _T("æ˜¯å¦ä¸ºçª—å£ %s åŠ è½½èµ‹èƒ½æ¨¡å—"), this->szTitle);
 
-    if (IDOK == MessageBox(this->hDlg, sz, _T("¼ÓÔØ¸³ÄÜÄ£¿é"), MB_ICONQUESTION | MB_OKCANCEL)) {
+    if (IDOK == MessageBox(this->hDlg, sz, _T("åŠ è½½èµ‹èƒ½æ¨¡å—"), MB_ICONQUESTION | MB_OKCANCEL)) {
         OnInject();
     }
 }
@@ -236,8 +236,8 @@ bool CMainDlg::isHaveInject()
     bool b = this->haveInject;
     if (!b) {
         TCHAR sz[MAX_PATH];
-        std::swprintf(sz, _countof(sz), _T("ÉĞÎ´×¢Èë¸³ÄÜÄ£¿é£¬ÇëÏÈÍê³É×¢Èë²Ù×÷"));
-        MessageBox(this->hDlg, sz, _T("ÌáÊ¾"), MB_ICONWARNING);
+        std::swprintf(sz, _countof(sz), _T("å°šæœªæ³¨å…¥èµ‹èƒ½æ¨¡å—ï¼Œè¯·å…ˆå®Œæˆæ³¨å…¥æ“ä½œ"));
+        MessageBox(this->hDlg, sz, _T("æç¤º"), MB_ICONWARNING);
     }
     return b;
 }
@@ -245,7 +245,7 @@ bool CMainDlg::isHaveInject()
 
 void CMainDlg::OnSetProcessId()
 {
-    // TODO: ÔÚ´Ë´¦Ìí¼ÓÊµÏÖ´úÂë.
+    // TODO: åœ¨æ­¤å¤„æ·»åŠ å®ç°ä»£ç .
     INT_PTR res = DialogBox(hInst, MAKEINTRESOURCE(IDD_SETPROCESSDLG), this->hDlg, CSetProcessDlg::SetProcess);
     if (res == IDCANCEL) {
         return;

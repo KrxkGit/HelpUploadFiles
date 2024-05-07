@@ -1,5 +1,7 @@
 # 🍕HelpUploadFiles
 
+ ![GitHub license](https://img.shields.io/github/license/KrxkGit/HelpUploadFiles) ![GitHub last commit](https://img.shields.io/github/last-commit/KrxkGit/HelpUploadFiles/dev) [![GitHub stars](https://img.shields.io/github/stars/KrxkGit/HelpUploadFiles.svg?style=social)](https://github.com/KrxkGit/HelpUploadFiles)
+
 ## 🍺简介 - Introduction
 
 ***HelpUploadFiles （星空上传助手）*** 是一款  **辅助上传** 工具。我们知道，*git* 提供了 **.gitignore** 文件用于根据规则忽略某些文件的上传，但是这个功能仅限于 *git*，还有很多场景涉及**文件的上传**，比如我们可能需要将某些文件上传到网盘，但是大部分网盘并不具备 ***根据规则忽略指定文件*** 的功能，这十分不方便。另外，还存在着许许多多的上传文件的场景，此时，***HelpUploadFiles*** 油然而生！
@@ -9,6 +11,16 @@
 由于对于单个文件，不需要特别的规则进行忽略上传，故 ***HelpUploadFiles*** 主要是针对 ***文件夹*** 的上传场景。
 
 Since there are no special rules required to ignore uploading for individual files, HelpUploadFiles is primarily aimed at scenarios involving folder uploads.
+
+## 🔥软件包的获取
+
+1. 可前往 *Actions* 区下载最新特性 **HelpUploadFiles** 包。
+2. 可前往 *Releases* 区下载稳定版本的 **HelpUploadFiles** 包。
+
+## 🔥Package Acquisition
+
+1. You can go to the *Actions* section to download the latest feature package **HelpUploadFiles**.
+2. You can go to the *Releases* section to download the stable version of the **HelpUploadFiles** package.
 
 ## 🍺文件上传概念的推广 -  Expansion of File Upload Concepts
 
@@ -81,7 +93,7 @@ The following scenarios have been verified and are operational:
 ## 📍使用注意事项
 
 1. ***HelpUploadFiles*** 分为 ***32位*** 与 ***64位***  两个版本，需要根据不同的上传接口选择不同的版本，如目前百度网盘客户端是32位的，则需要使用32位版本的 ***HelpUploadFiles***；而64位系统的Edge浏览器是64位程序，则需要使用64位版本的 ***HelpUploadFiles***。
-2. 目前版本(v1.0.2)仅支持同时拦截一个进程的文件上传行为，值得注意的是 ***32位 与 64位版本 加起来一共能同时拦截一个进程***。且 ***添加/移除*** 忽略列表的操作 **仅对当前拦截的进程有效，若切换进程，即使重新注入，也需要重新添加忽略列表（移除后重新添加），否则将无效。** 这是由于目前采用的进程通信方案导致的。
+2. 目前版本(v1.0.3)仅支持同时拦截一个进程的文件上传行为，值得注意的是 ***32位 与 64位版本 加起来一共能同时拦截一个进程***。且 ***添加/移除*** 忽略列表的操作 **仅对当前拦截的进程有效，若切换进程，即使重新注入，也需要重新添加忽略列表（移除后重新添加），否则将无效。** 这是由于目前采用的进程通信方案导致的。
 3. 对于下方输入框手动输入的忽略规则，将采用 **C++ 正则表达式规则**。
 4. 对于拖拽上传的文件，将自动进行转义使其符合 **C++正则表达式规则**。
 

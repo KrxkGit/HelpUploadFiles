@@ -7,9 +7,11 @@ name: MSBuild
 
 on:
   push:
-    branches: [ "main", "dev", "fix" ]
+    branches: 
+      - '*'
   pull_request:
-    branches: [ "main", "dev", "fix" ]
+    branches: 
+      - '*'
 
 env:
   # Path to the solution file relative to the root of the project.
@@ -41,4 +43,28 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+      run: |
+        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=x86 ${{env.SOLUTION_FILE_PATH}}
+        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=x64 ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Package
+      run: |
+        mkdir dist/
+        mkdir dist/x86/
+        mkdir dist/x64/
+
+        mv x64/Release/HelpUploadFiles.exe dist/x64/
+        mv x64/Release/WorkDll.dll dist/x64/
+
+        mv Release/HelpUploadFiles.exe dist/x86/
+        mv Release/WorkDll.dll dist/x86/
+        mv documents/SkinBackup/*.* dist/x86/
+        
+        mv Release/Startup.exe dist/
+        
+        
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v4.3.1
+      with:
+        name: HelpUploadFiles
+        path: dist/
