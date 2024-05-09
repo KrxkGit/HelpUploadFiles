@@ -356,6 +356,36 @@ Other Common Symbols:
 - `|`: Represents an OR operation, matching either of the two.
 - `.`: Matches any character except for a newline.
 
+
+## 🧊v1.0.4 新增功能 - v1.0.4 New Features
+
+### 🥤简介 - Introduction
+
+新版本增添了基于进程 id 注入赋能模块到进程的功能,主要可用于注入一些不存在可见窗口的进程。其中选择 32位还是 64 位版本 HelpUploadFiles 的策略与基于窗口捕获方案相同。
+
+The new version has added the functionality to inject an empowerment module into a process based on the process ID, which can primarily be used for injecting into processes that do not have visible windows. The strategy for selecting whether to use the 32-bit or 64-bit version of HelpUploadFiles is the same as the one based on the window capture scheme.
+
+### 🥤使用步骤 - Usage Steps
+
+#### 🍷通过任务管理器获取进程 id -  Obtain the Process ID through Task Manager
+
+通过任务管理器查看需要注入的进程 id号。
+
+Use the Task Manager to view the process ID that needs to be injected.
+
+![image-20240509222044400](https://github.com/KrxkGit/HelpUploadFiles/blob/main/documents/imgs/10.jpg)
+
+#### 🍷根据进程id注入进程 - Inject into the Process Based on the Process ID
+
+选择合适版本 (x86/x64) 的 **HelpUploadFiles** 完成注入。
+
+Choose the appropriate version (x86/x64) of **HelpUploadFiles** to complete the injection.
+
+![image-20240509221813136](https://github.com/KrxkGit/HelpUploadFiles/blob/main/documents/imgs/9.jpg)
+
+![image-20240509222322638](https://github.com/KrxkGit/HelpUploadFiles/blob/main/documents/imgs/11.jpg)
+
+
 ## 🟡已发现的不完全适用情况 - Known Partially Incompatible Situations
 
 - 比特球网盘 未完全兼容，存在目录创建失败问题。

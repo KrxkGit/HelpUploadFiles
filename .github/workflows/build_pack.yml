@@ -7,11 +7,13 @@ name: MSBuild
 
 on:
   push:
-    branches: 
-      - '*'
+    branches-ignore:
+        - 'main'
+
   pull_request:
-    branches: 
-      - '*'
+    branches-ignore: 
+        - 'main'
+
 
 env:
   # Path to the solution file relative to the root of the project.
