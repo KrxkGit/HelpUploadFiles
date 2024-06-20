@@ -66,6 +66,12 @@ void CMainDlg::OnCommand()
     case IDM_INJECT:
         OnInject();
         break;
+    case IDM_IMPORT:
+        OnImportSetting();
+        break;
+    case IDM_EXPORT:
+        OnExportSetting();
+        break;
     case IDM_SETPROCESS:
         OnSetProcessId();
         break;
@@ -255,4 +261,169 @@ void CMainDlg::OnSetProcessId()
 
     this->haveInject = true;
     
+}
+
+
+void CMainDlg::OnImportSetting()
+{
+    if (!isHaveInject()) {
+        return;
+    }
+    // 导入配置文件：忽略列表
+    OPENFILENAME ofn; // 使用OPENFILENAMEW结构体，它是OPENFILENAME的Unicode版本
+    TCHAR szFile[MAX_PATH]; // 使用WCHAR数组来存储Unicode字符串
+    szFile[0] = '\0';
+
+    // 初始化OPENFILENAMEW结构体
+    ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = hDlg;
+    ofn.lpstrFile = szFile;
+    ofn.nMaxFile = _countof(szFile);
+    ofn.lpstrFilter = _T("HUFS Files\0*.hufs\0All Files\0*.*\0");
+    ofn.nFilterIndex = 1;
+    ofn.lpstrFileTitle = NULL;
+    ofn.nMaxFileTitle = 0;
+    ofn.lpstrInitialDir = NULL;
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+    // 显示打开文件对话框
+    if (GetOpenFileNameW(&ofn) == TRUE && MessageBox(hDlg, _T("是否追加配置？"),_T("提示"), MB_ICONQUESTION | MB_OKCANCEL) == IDOK) {
+        // 文件路径为 ofn.lpstrFile
+        SettingSerialize(TRUE, ofn.lpstrFile);
+    }
+    else {
+        // 用户取消了操作
+        return;
+    }
+}
+
+
+void CMainDlg::OnExportSetting()
+{
+    // 导出配置文件：忽略列表
+    OPENFILENAME ofn; // 使用OPENFILENAMEW结构体，它是OPENFILENAME的Unicode版本
+    TCHAR szFile[MAX_PATH]; // 使用WCHAR数组来存储Unicode字符串
+    szFile[0] = '\0';
+    TCHAR szFileName[MAX_PATH]; // 存储用户选择的文件名
+
+    // 初始化OPENFILENAMEW结构体
+    ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = NULL;
+    ofn.lpstrFile = szFile;
+    ofn.nMaxFile = _countof(szFile); // 确保nMaxFile是字符数，而不是字节数
+    ofn.lpstrDefExt = L"hufs"; // 默认扩展名
+    ofn.lpstrFilter = L"HUFS Files\0*.hufs\0All Files\0*.*\0";
+    ofn.nFilterIndex = 1;
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_EXPLORER;
+
+    // 显示保存文件对话框
+    if (GetSaveFileNameW(&ofn) == TRUE) {
+        // 用户选择了文件名并点击了“保存”按钮
+        // szFile中包含了选择的文件的完整路径
+        wcscpy_s(szFileName, ofn.lpstrFile); // 复制选择的文件名
+        // 这里可以进行文件保存操作
+        SettingSerialize(FALSE, szFileName);
+    }
+    else {
+        // 用户取消了操作
+        return;
+    }
+}
+
+
+void CMainDlg::SettingSerialize(bool bReadPattern, LPTSTR filename)
+{
+    /*
+    * 文件格式：
+    * 第一行为 版本号
+    * 每一行都为 TCHAR[MAX_PATH]
+    */
+    double version = 1.05;
+    double versionRead = 0;
+    DWORD dwCreationDisposition = bReadPattern ? OPEN_EXISTING : CREATE_ALWAYS;
+
+    // 读写配置文件
+    HANDLE hFile = CreateFile(
+        filename,             // 文件路径
+        GENERIC_READ | GENERIC_WRITE,         // 打开文件用于读取与写入
+        0,                    // 不共享（独占）
+        NULL,                 // 安全属性
+        dwCreationDisposition,       // 打开已存在的文件
+        FILE_ATTRIBUTE_NORMAL,// 正常文件属性
+        NULL);                // 不使用模板
+
+    if (hFile == INVALID_HANDLE_VALUE) {
+        MessageBox(hDlg, _T("配置文件打开或写入失败!"), _T("严重错误"), MB_ICONERROR);
+        return;
+    }
+
+    HWND hwndListBox = GetDlgItem(hDlg, IDC_LIST1); // 获取列表框控件的句柄
+
+    __try {
+        if (bReadPattern) {
+            // 读模式
+            // 
+            // 读取版本号
+            DWORD dwSize = 0;
+            if (ReadFile(hFile, &versionRead, sizeof(versionRead), &dwSize, NULL)) {
+                if (dwSize == sizeof(versionRead)) {
+                    if (versionRead != version) {
+                        MessageBox(hDlg, _T("配置文件版本号不一致"), _T("提示"), MB_ICONERROR);
+                        return;
+                    }
+                }
+            }
+            else {
+                MessageBox(hDlg, _T("读取配置文件失败"), _T("提示"), MB_ICONERROR);
+                return;
+            }
+
+            // 读取每一行
+            TCHAR szBuffer[MAX_PATH];
+            DWORD bufferSize = sizeof(szBuffer);
+            dwSize = 0;
+            while (ReadFile(hFile, szBuffer, bufferSize, &dwSize, NULL)) {
+                if (dwSize > 0) {
+                    // 添加
+                    _tcscpy_s(this->szInput, _countof(this->szInput), szBuffer);
+                    DoAdd();
+                }
+                else {
+                    break;
+                }
+            }
+
+            MessageBox(hDlg, _T("导入配置文件完成"), _T("提示"), MB_ICONINFORMATION);
+        }
+        else {
+            // 写模式
+            // 写入版本号
+            DWORD bytesWritten = sizeof(version);
+            BOOL bSuccess = WriteFile(hFile, &version, bytesWritten, &bytesWritten, NULL);
+            if (!bSuccess) {
+                MessageBox(hDlg, _T("写入版本号失败"), _T("提示"), MB_ICONERROR);
+                return;
+            }
+
+            // 写入每一行
+            int count = ListBox_GetCount(hwndListBox); // 获取列表框中的项数
+
+            for (int i = 0; i < count; ++i) {
+                TCHAR buffer[MAX_PATH]; // 每个项的文本不超过255个字符
+                ListBox_GetText(hwndListBox, i, buffer); // 获取第i项的文本
+
+                
+                bSuccess = WriteFile(hFile, buffer, sizeof(buffer), &bytesWritten, NULL);
+                if (!bSuccess) {
+                    MessageBox(hDlg, _T("写入版本号失败"), _T("提示"), MB_ICONERROR);
+                    return;
+                }
+
+            }
+        }
+    } __finally {
+        CloseHandle(hFile);
+    }
 }
