@@ -12,6 +12,10 @@
 
 Since there are no special rules required to ignore uploading for individual files, HelpUploadFiles is primarily aimed at scenarios involving folder uploads.
 
+## 🧡Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=KrxkGit/HelpUploadFiles&type=Date)](https://star-history.com/#KrxkGit/HelpUploadFiles&Date)
+
 ## 🔥软件包的获取
 
 1. 可前往 *Actions* 区下载最新特性 **HelpUploadFiles** 包。
@@ -384,6 +388,12 @@ Choose the appropriate version (x86/x64) of **HelpUploadFiles** to complete the 
 ![image-20240509221813136](https://github.com/KrxkGit/HelpUploadFiles/blob/main/documents/imgs/9.jpg)
 
 ![image-20240509222322638](https://github.com/KrxkGit/HelpUploadFiles/blob/main/documents/imgs/11.jpg)
+
+## 🧊v1.0.5 新增功能 - v1.0.5 New Features
+
+此版本新增忽略列表导入与导出功能。
+
+This version adds the functionality of importing and exporting an ignore list.
 
 
 ## 🟡已发现的不完全适用情况 - Known Partially Incompatible Situations
