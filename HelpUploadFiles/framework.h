@@ -11,6 +11,7 @@
 #include <windowsx.h>
 #include <strsafe.h>
 #include <process.h>
+#include <commdlg.h>
 // C 运行时头文件
 #include <stdlib.h>
 #include <malloc.h>

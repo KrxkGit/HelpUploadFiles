@@ -47,5 +47,8 @@ protected:
 	void OnLButtonUp();
 	bool isHaveInject();
 	void OnSetProcessId();
+	void OnImportSetting();
+	void OnExportSetting();
+	void SettingSerialize(bool bReadPattern, LPTSTR filename);
 };
 
